@@ -31,7 +31,7 @@
       // The provided key works for this sample only when run from
       // https://google-api-javascript-client.googlecode.com/hg/samples/authSample.html
       // To use in your own application, replace this API key with your own.
-      var apiKey = '';
+      var apiKey = 'AIzaSyAzcvy3ItaxN35ogfNl1q8xogzU08BBmsY';
 
       // Use a button to handle authentication the first time.
       function handleClientLoad() {
@@ -43,7 +43,7 @@
       function makeApiCall() {
         gapi.client.load('plus', 'v1', function() {
           var request = gapi.client.plus.people.get({
-            'userId': ''
+            'userId': '118054557264017646935'
             // For instance: 
             // 'userId': '+GregorioRobles'
           });
@@ -57,7 +57,30 @@
             document.getElementById('content').appendChild(heading);
           });
         });
-      }
+	
+		gapi.client.load('plus', 'v1', function() {
+			var request = gapi.client.plus.activities.list({
+				'userId': '103846222472267112072',
+				'collection': 'public'
+ 		});
+		request.execute(function(resp) {
+			for (i in resp.items){
+				var heading = document.createElement('li');
+				var geo = document.createElement('ul');
+				heading.appendChild(document.createTextNode(+(i) + " -> "));
+				heading.appendChild(document.createTextNode(resp.items[i].title));
+				document.getElementById('content').appendChild(heading);
+				if (resp.items[i].location){
+					geo.appendChild(document.createTextNode("Geolocation --> longitud: "));
+					geo.appendChild(document.createTextNode(resp.items[i].location.position.longitude));
+					geo.appendChild(document.createTextNode(",  latitud: "));
+					geo.appendChild(document.createTextNode(resp.items[i].location.position.latitude));
+					document.getElementById('content').appendChild(geo);
+				}
+			}
+		});
+	});
+	}
     </script>
     <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
     <div id="content"></div>
